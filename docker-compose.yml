@@ -33,5 +33,21 @@ services:
       DB_HOST: db
       DB_PORT: 5432
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.frontend
+    container_name: my_project_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - web
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
+
 volumes:
   postgres_data:
