@@ -1,15 +1,39 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from api.models import Car
+from api.models import Offer
 
-
-class CarSerializer(serializers.ModelSerializer):
+class OfferListSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Car
-        fields = ['id', 'brand', 'model', 'year', 'price', 'description', 'created_at', 'updated_at']
+        model = Offer
+        fields = [
+            'id',
+            'brand',
+            'model',
+            'price',
+            'start_time',
+            'photos',
+        ]
 
-        from django.contrib.auth.models import User
-from rest_framework import serializers
+class OfferDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Offer
+        fields = [
+            'id',
+            'brand',
+            'model',
+            'generation',
+            'production_year',
+            'price',
+            'condition',
+            'body_type',
+            'fuel_type',
+            'start_time',
+            'description',
+            'other_info',
+            'place',
+            'photos',
+        ]
+
 
 
 class RegisterSerializer(serializers.ModelSerializer):

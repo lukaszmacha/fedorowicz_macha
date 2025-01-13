@@ -1,2 +1,2 @@
-from .cars import CarViewSet
+from .offers import OfferViewSet
 from .registration import RegisterView
