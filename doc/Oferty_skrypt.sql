@@ -26,7 +26,7 @@ SELECT
   (ARRAY['BENZYNA','DIESEL','HYBRYDA','ELEKTRYCZNY'])[floor(random()*4)+1] AS fuel_type,
 
   -- start_time: losowy czas w ciągu ostatniego roku
-  now() - (random() * interval '365 days') AS start_time,
+  now() + (random() * interval '30 days') AS start_time,
 
   -- opis, np. "Opis testowy 1", "Opis testowy 2" itd.
   'Opis testowy ' || generate_series::text AS description,
