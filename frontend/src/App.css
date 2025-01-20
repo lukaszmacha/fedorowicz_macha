@@ -1,26 +1,70 @@
 @import './styles/colors.css';
 
-.App {
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
   text-align: center;
+  position: relative;
+  background-color: var(--light-opaque); /* Apply background color */
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('./assets/images/car-pattern.png') 0 0 repeat;
+  background-size: 100px;
+  background-attachment: fixed;
+  opacity: 0.03;
+  z-index: -1; /* Ensure the background is behind other content */
+}
+
+.App {
+  position: relative;
+  min-height: 100vh;
+}
+
+.App > * {
+  position: relative;
+  z-index: 2;
 }
 
 .App-header {
-  background-color: var(--primary-dark);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--light);
+  justify-content: flex-start;
+  padding: 2rem;
 }
 
-/* Custom navbar styling */
+.App-header h1 {
+  margin-bottom: 1rem;
+  color: var(--primary);
+  text-align: left;
+}
+
+.App-header p {
+  color: var(--secondary);
+  text-align: left;
+}
+
 .navbar {
-  background-color: var(--primary) !important;
+  background-color: var(--primary-dark) !important;
 }
 
 .btn-outline-light:hover {
   background-color: var(--accent) !important;
   border-color: var(--accent) !important;
+}
+
+.card {
+  height: 100%;
 }
