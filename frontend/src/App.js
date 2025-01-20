@@ -4,6 +4,7 @@ import StartingPage from './pages/StartingPage';
 import SignUpPage from './pages/SignUpPage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
+import OfferPage from './pages/OfferPage';
 import './App.css';
 
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
             <Route path="/login" element={<LoginPage/>} />
             <Route path="/sign-up" element={<SignUpPage/>} />
             <Route path="*" element={<NotFoundPage />} />
+            <Route path="/offer/:id" element={<OfferPage />} />
         </Routes>
     </Router>
   );
