@@ -32,6 +32,9 @@ services:
       DB_PASSWORD: mypass
       DB_HOST: db
       DB_PORT: 5432
+      STRIPE_SECRET_KEY:  sk_test_51PquArP4Lupois9Hm5DHwAKuGXmPWbstcBCwLYsyJPloGS1qdRVYs9wjcz9zN3xzJ5NY2UquAlUldFjpoz3CVW9t00HrjEaUL2
+      STRIPE_PUBLISHABLE_KEY: pk_test_51PquArP4Lupois9HFOq1gLdywLcnGUJQapuI9E26NR3qy1k0JnPBJ2p3HEoChhZ1KMAvfcRs6zAbopTdMWy52shO00FxVb9xed
+      STRIPE_WEBHOOK_SECRET: whsec_a7ZbgHUTKRfHtL9Hf8cprYj8zVqFlnyn
 
   frontend:
     build:
