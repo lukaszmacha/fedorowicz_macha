@@ -54,7 +54,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/api/offers",
+					"raw": "http://localhost:8000/api/offers/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -62,7 +62,90 @@
 					"port": "8000",
 					"path": [
 						"api",
-						"offers"
+						"offers",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dodawanie oferty",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3NDUyNjIxLCJpYXQiOjE3Mzc0NTIzMjEsImp0aSI6ImIwOTJhZjAyNDViNTRhYzhhY2U3MDcwZDFmZjQyZDVmIiwidXNlcl9pZCI6MX0.RNl26Jy03zcLlYFqIxZ30Fr5UfPkMvOmJrbDQ-PH-UI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n           \"brand\": \"Toyota\",\r\n           \"model\": \"Corolla\",\r\n           \"generation\": \"E210\",\r\n           \"production_year\": 2022,\r\n           \"price\": 75000.00,\r\n           \"condition\": \"NOWY\",\r\n           \"body_type\": \"SEDAN\",\r\n           \"fuel_type\": \"BENZYNA\",\r\n           \"description\": \"Nowa Toyota Corolla, bezwypadkowa, pierwszy właściciel.\",\r\n           \"other_info\": \"Przebieg: 10 000 km, serwisowany w ASO.\",\r\n           \"place\": \"Warszawa\",\r\n           \"photos\": [\r\n               \"https://example.com/photo1.jpg\",\r\n               \"https://example.com/photo2.jpg\"\r\n           ]\r\n         }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/offer/create/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"offer",
+						"create",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Usuwanie oferty",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3NDUyODAwLCJpYXQiOjE3Mzc0NTI1MDAsImp0aSI6IjM3ODkzYzRmMmQ3ZTRkNWE5YWMwYWNiZjU4NGNkNzdhIiwidXNlcl9pZCI6MX0.Me-9-pmR8V6qpAeOuydJ5gc_JQWbwqdYPIfSBKXEOLw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/offer/1/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"offer",
+						"1",
+						""
 					]
 				}
 			},
