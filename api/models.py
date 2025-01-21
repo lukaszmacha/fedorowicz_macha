@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.utils.timezone import now
 
 CONDITION_CHOICES = (
     ('NOWY', 'Nowy'),
@@ -20,8 +22,10 @@ FUEL_TYPE_CHOICES = (
     ('HYBRYDA', 'Hybryda'),
     ('ELEKTRYCZNY', 'Elektryczny'),
 )
+User = get_user_model()
 
 class Offer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     brand = models.CharField(max_length=100) 
     model = models.CharField(max_length=100)
     generation = models.CharField(max_length=100, blank=True, null=True)
@@ -35,7 +39,8 @@ class Offer(models.Model):
     description = models.TextField(blank=True)
     other_info = models.TextField(blank=True)
     place = models.CharField(max_length=100, blank=True, null=True)
-
+    stripe_subscription_id = models.CharField(max_length=255, blank=True, null=True)
+    active_until = models.DateTimeField(blank=True, null=True) 
     photos = ArrayField(
         base_field=models.URLField(max_length=300),
         default=list,
