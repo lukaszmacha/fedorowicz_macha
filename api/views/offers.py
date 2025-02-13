@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from django.conf import settings
 import stripe
 
-from api.models import Offer
+from api.models import Offer, Auction
 from api.serializers import OfferListSerializer, OfferDetailSerializer, OfferSerializer
 from api.filters import OfferFilter
 from api.views_permissions import ReadOnly
@@ -45,7 +45,13 @@ class CreateOfferView(APIView):
     def post(self, request):
         serializer = OfferSerializer(data=request.data)
         if serializer.is_valid():
-            offer = serializer.save(user=request.user)  
+            offer = serializer.save(user=request.user)
+            Auction.objects.create(
+                offer=offer,
+                current_price=offer.price,
+                has_started=False,
+                auction_end_time=None
+            )  
             payment_link = stripe.PaymentLink.create(
                 line_items=[
                     {"price": "price_1QjdWiP4Lupois9HdZ9rAASr", "quantity": 1}

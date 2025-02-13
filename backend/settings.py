@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django_filters",
     "rest_framework",
     "api",  
+    "channels",
 ]
 
 MIDDLEWARE = [
@@ -142,3 +143,11 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
 }
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
+
+ASGI_APPLICATION = "backend.asgi.application"

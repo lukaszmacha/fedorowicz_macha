@@ -50,3 +50,25 @@ class Offer(models.Model):
 
     def __str__(self):
         return f"{self.brand} {self.model} ({self.price} PLN)"
+
+class Auction(models.Model):
+    offer = models.OneToOneField(Offer, on_delete=models.CASCADE, related_name='auction')
+    current_price = models.DecimalField(max_digits=10, decimal_places=2)
+    current_winner = models.ForeignKey(
+        User, on_delete=models.SET_NULL, null=True, blank=True, related_name='won_auctions'
+    )
+    auction_end_time = models.DateTimeField(null=True, blank=True)
+    has_started = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Auction for {self.offer.brand} {self.offer.model} - Current price: {self.current_price}"
+
+class Bid(models.Model):
+    auction = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name='bids')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    bid_price = models.DecimalField(max_digits=10, decimal_places=2)
+    bid_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} bid {self.bid_price} on {self.auction.offer.brand} {self.auction.offer.model}"
