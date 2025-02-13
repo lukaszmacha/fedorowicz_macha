@@ -1,6 +1,23 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from api.models import Offer
+from api.models import Auction, Bid
+
+class AuctionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Auction
+        fields = ['offer', 'current_price', 'current_winner', 'auction_end_time', 'active', 'created_at']
+
+class AuctionInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Auction
+        fields = ['id', 'current_price', 'auction_end_time', 'has_started', 'current_winner']
+
+class BidSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bid
+        fields = ['auction', 'user', 'bid_price', 'bid_time']
+        read_only_fields = ['user', 'bid_time']
 
 class OfferListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,6 +33,7 @@ class OfferListSerializer(serializers.ModelSerializer):
         ]
 
 class OfferDetailSerializer(serializers.ModelSerializer):
+    auction = AuctionInfoSerializer(read_only=True)
     class Meta:
         model = Offer
         fields = [
@@ -29,6 +47,7 @@ class OfferDetailSerializer(serializers.ModelSerializer):
             'body_type',
             'fuel_type',
             'start_time',
+            'auction',
             'description',
             'other_info',
             'place',

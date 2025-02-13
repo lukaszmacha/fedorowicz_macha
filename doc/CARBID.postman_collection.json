@@ -54,7 +54,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8000/api/offers/",
+					"raw": "http://localhost:8000/api/offers/26",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -63,7 +63,7 @@
 					"path": [
 						"api",
 						"offers",
-						""
+						"26"
 					]
 				}
 			},
@@ -77,7 +77,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM3NDUyNjIxLCJpYXQiOjE3Mzc0NTIzMjEsImp0aSI6ImIwOTJhZjAyNDViNTRhYzhhY2U3MDcwZDFmZjQyZDVmIiwidXNlcl9pZCI6MX0.RNl26Jy03zcLlYFqIxZ30Fr5UfPkMvOmJrbDQ-PH-UI",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM5NDgxMzIyLCJpYXQiOjE3Mzk0ODEwMjIsImp0aSI6ImEzYzcyZDNkMGI0YzQxYTk5N2YwMjE4MGE1YmY0ODM5IiwidXNlcl9pZCI6MX0.Y1v9xDjfNxHB_km9n6wvTGbMcPNUIeIVO06SE_5FKp4",
 							"type": "string"
 						}
 					]
@@ -86,7 +86,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n           \"brand\": \"Toyota\",\r\n           \"model\": \"Corolla\",\r\n           \"generation\": \"E210\",\r\n           \"production_year\": 2022,\r\n           \"price\": 75000.00,\r\n           \"condition\": \"NOWY\",\r\n           \"body_type\": \"SEDAN\",\r\n           \"fuel_type\": \"BENZYNA\",\r\n           \"description\": \"Nowa Toyota Corolla, bezwypadkowa, pierwszy właściciel.\",\r\n           \"other_info\": \"Przebieg: 10 000 km, serwisowany w ASO.\",\r\n           \"place\": \"Warszawa\",\r\n           \"photos\": [\r\n               \"https://example.com/photo1.jpg\",\r\n               \"https://example.com/photo2.jpg\"\r\n           ]\r\n         }",
+					"raw": "{\r\n           \"brand\": \"MG\",\r\n           \"model\": \"NX300h\",\r\n           \"generation\": \"E210\",\r\n           \"production_year\": 2022,\r\n           \"price\": 75000.00,\r\n           \"condition\": \"NOWY\",\r\n           \"body_type\": \"SEDAN\",\r\n           \"fuel_type\": \"BENZYNA\",\r\n           \"description\": \"Nowa Toyota Corolla, bezwypadkowa, pierwszy właściciel.\",\r\n           \"other_info\": \"Przebieg: 10 000 km, serwisowany w ASO.\",\r\n           \"place\": \"Warszawa\",\r\n           \"photos\": [\r\n               \"https://example.com/photo1.jpg\",\r\n               \"https://example.com/photo2.jpg\"\r\n           ]\r\n         }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -145,6 +145,48 @@
 						"api",
 						"offer",
 						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Licytacja",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM5NDc5NjA0LCJpYXQiOjE3Mzk0NzkzMDQsImp0aSI6Ijc4NWZmZDcwMTQ1ODRmZGNiZTcwYTM4NjNlOGUyYjU1IiwidXNlcl9pZCI6MX0.Jyhjr5inLMHurt-QJJe0NtLfCbMYoy4oiSpmYKu8KyI",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bid_amount\": \"75100.00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/api/offer/22/bid/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"offer",
+						"22",
+						"bid",
 						""
 					]
 				}
