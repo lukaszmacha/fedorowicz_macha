@@ -7,16 +7,16 @@ import NavbarComponent from '../components/utils/NavbarComponent'
 // assets
 import 'bootstrap/dist/css/bootstrap.min.css'
 
-const NotFoundPage = () => {
+const NotAccessibleForUnauthorized = () => {
     return (
         <div className='App'>
             <NavbarComponent />
             <header className='App-header'>
-                <h1>404 - Page Not Found</h1>
-                <p>The page you are looking for does not exist.</p>
+                <h1>401 - Unauthorized Access</h1>
+                <p>You must be logged in to access this resource.</p>
             </header>
         </div>
     )
 }
 
-export default NotFoundPage
+export default NotAccessibleForUnauthorized

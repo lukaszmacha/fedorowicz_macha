@@ -1,25 +1,35 @@
 // libs
-import React from 'react';
-import { Card, Row, Col } from 'react-bootstrap';
-import { StyleSheet, css } from 'aphrodite';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { Card, Row, Col } from 'react-bootstrap'
+import { StyleSheet, css } from 'aphrodite'
+import { Link } from 'react-router-dom'
 
 // local components
-import TimerComponent from '../utils/TimerComponent';
-import ImageComponent from '../utils/ImageComponent';
+import TimerComponent from '../utils/TimerComponent'
+import ImageComponent from '../utils/ImageComponent'
 
 // assets
-import placeholderImage from '../../assets/images/placeholder.png';
+import placeholderImage from '../../assets/images/placeholder.png'
 
-const Offer = ({ id, title, price, startTime, description, photosLinks, variant = 'row'}) => {
+const Offer = ({
+    id,
+    price,
+    brand,
+    model,
+    startTime,
+    description,
+    photosLinks,
+    variant = 'row',
+}) => {
+    const title = `${id} - ${brand}, ${model}`
 
     const formatPrice = (price) => {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 2,
-        }).format(price);
-    };
+        }).format(price)
+    }
 
     const RowVariant = () => (
         <Card className={css(styles.offerTile)}>
@@ -34,24 +44,42 @@ const Offer = ({ id, title, price, startTime, description, photosLinks, variant 
                     </Col>
                     <Col md={9}>
                         <Row>
-                            <Col md={4} className="text-start">
-                                <Card.Title className={css(styles.labelText)}>{title}</Card.Title>
+                            <Col md={5} className='text-start'>
+                                <Card.Title className={css(styles.labelText)}>
+                                    {title}
+                                </Card.Title>
                             </Col>
-                            <Col md={3} className="text-start">
-                                <Card.Text className={css(styles.labelText, styles.offerTag, styles.adjustableText)}>
+                            <Col md={3} className='text-start'>
+                                <Card.Text
+                                    className={css(
+                                        styles.labelText,
+                                        styles.offerTag,
+                                        styles.adjustableText
+                                    )}>
                                     {formatPrice(price)}
                                 </Card.Text>
                             </Col>
-                            <Col md={5} className="text-start">
-                                <Card.Text className={css(styles.labelText, styles.offerTag, styles.adjustableText)}>
+                            <Col md={4} className='text-start'>
+                                <Card.Text
+                                    className={css(
+                                        styles.labelText,
+                                        styles.offerTag,
+                                        styles.adjustableText
+                                    )}>
                                     <TimerComponent targetTime={startTime} />
                                 </Card.Text>
                             </Col>
                         </Row>
                         <Row>
-                            <Col className="text-start">
-                                <Card.Text className={css(styles.descriptionLongText, styles.adjustableText)}>
-                                    Description:<br/>{description}
+                            <Col className='text-start'>
+                                <Card.Text
+                                    className={css(
+                                        styles.descriptionLongText,
+                                        styles.adjustableText
+                                    )}>
+                                    Description:
+                                    <br />
+                                    {description}
                                 </Card.Text>
                             </Col>
                         </Row>
@@ -59,12 +87,12 @@ const Offer = ({ id, title, price, startTime, description, photosLinks, variant 
                 </Row>
             </Card.Body>
         </Card>
-    );
+    )
 
     const SquareVariant = () => (
         <Card className={css(styles.offerTile)}>
-            <Card.Body className="d-flex flex-column">
-                <Row className="h-100 mb-2">
+            <Card.Body className='d-flex flex-column'>
+                <Row className='h-100 mb-2'>
                     <Col md={8}>
                         <ImageComponent
                             link={photosLinks[0]}
@@ -73,18 +101,18 @@ const Offer = ({ id, title, price, startTime, description, photosLinks, variant 
                         />
                     </Col>
                     <Col md={4}>
-                        <Row className="h-50">
+                        <Row className='h-50'>
                             <ImageComponent
                                 link={photosLinks[1]}
                                 fallbackImage={placeholderImage}
                                 className={css(styles.secondaryImage)}
                             />
                         </Row>
-                        <Row className="h-50">
+                        <Row className='h-50'>
                             <ImageComponent
                                 link={photosLinks[2]}
                                 fallbackImage={placeholderImage}
-                                className={css(styles.secondaryImage)} 
+                                className={css(styles.secondaryImage)}
                             />
                         </Row>
                     </Col>
@@ -92,16 +120,28 @@ const Offer = ({ id, title, price, startTime, description, photosLinks, variant 
                 <Row>
                     <Col>
                         <Row>
-                            <Col md={4} className="text-start">
-                                <Card.Title className={css(styles.labelText)}>{title}</Card.Title>
+                            <Col md={5} className='text-start'>
+                                <Card.Title className={css(styles.labelText)}>
+                                    {title}
+                                </Card.Title>
                             </Col>
-                            <Col md={3} className="text-start">
-                                <Card.Text className={css(styles.labelText, styles.offerTag, styles.adjustableText)}>
+                            <Col md={3} className='text-start'>
+                                <Card.Text
+                                    className={css(
+                                        styles.labelText,
+                                        styles.offerTag,
+                                        styles.adjustableText
+                                    )}>
                                     {formatPrice(price)}
                                 </Card.Text>
                             </Col>
-                            <Col md={5} className="text-start">
-                                <Card.Text className={css(styles.labelText, styles.offerTag, styles.adjustableText)}>
+                            <Col md={4} className='text-start'>
+                                <Card.Text
+                                    className={css(
+                                        styles.labelText,
+                                        styles.offerTag,
+                                        styles.adjustableText
+                                    )}>
                                     <TimerComponent targetTime={startTime} />
                                 </Card.Text>
                             </Col>
@@ -109,22 +149,30 @@ const Offer = ({ id, title, price, startTime, description, photosLinks, variant 
                     </Col>
                 </Row>
                 <Row>
-                    <Col className="text-start">
-                        <Card.Text className={css(styles.descriptionShortText, styles.adjustableText)}>
-                            Description:<br/>{description}
+                    <Col className='text-start'>
+                        <Card.Text
+                            className={css(
+                                styles.descriptionShortText,
+                                styles.adjustableText
+                            )}>
+                            Description:
+                            <br />
+                            {description}
                         </Card.Text>
                     </Col>
                 </Row>
             </Card.Body>
         </Card>
-    );
+    )
 
-    return <Link to={`/offer/${id}`} style={{textDecoration: 'none'}}> 
-                {variant === 'row' ? <RowVariant /> : <SquareVariant />} 
-            </Link>;
-};
+    return (
+        <Link to={`/offer/${id}`} style={{ textDecoration: 'none' }}>
+            {variant === 'row' ? <RowVariant /> : <SquareVariant />}
+        </Link>
+    )
+}
 
-export default Offer;
+export default Offer
 
 // Styles
 const styles = StyleSheet.create({
@@ -152,12 +200,12 @@ const styles = StyleSheet.create({
     },
     firstImage: {
         width: '100%',
-        objectFit: 'cover'
+        objectFit: 'cover',
     },
     secondaryImage: {
         width: '100%',
         height: '90%',
-        objectFit: 'cover'
+        objectFit: 'cover',
     },
     offerTag: {
         color: '#6c757d',
@@ -183,4 +231,4 @@ const styles = StyleSheet.create({
             fontSize: '16px',
         },
     },
-});
+})

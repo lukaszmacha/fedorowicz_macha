@@ -33,7 +33,9 @@ class OfferListSerializer(serializers.ModelSerializer):
         ]
 
 class OfferDetailSerializer(serializers.ModelSerializer):
+    is_owner = serializers.SerializerMethodField()
     auction = AuctionInfoSerializer(read_only=True)
+
     class Meta:
         model = Offer
         fields = [
@@ -52,8 +54,14 @@ class OfferDetailSerializer(serializers.ModelSerializer):
             'other_info',
             'place',
             'photos',
+            'is_owner'
         ]
 
+    def get_is_owner(self, obj):
+        request = self.context.get('request')
+        if request and request.user.is_authenticated:
+            return obj.user == request.user
+        return False
 
 class OfferSerializer(serializers.ModelSerializer):
     class Meta:

@@ -39,6 +39,10 @@ class OfferViewSet(viewsets.ReadOnlyModelViewSet):
         """Returns only active offers."""
         return Offer.objects.filter(active_until__isnull=False).filter(active_until__gt=now())
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        return context
+
 class CreateOfferView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
