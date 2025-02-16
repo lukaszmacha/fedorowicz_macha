@@ -9,6 +9,7 @@ import NavbarComponent from '../components/utils/NavbarComponent'
 import apiEndpoint from '../components/utils/ApiEndpoint'
 import TimerComponent from '../components/utils/TimerComponent'
 import ImageComponent from '../components/utils/ImageComponent'
+import BidTile from '../components/offer/BidTile'
 
 // assets
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -51,6 +52,11 @@ const OfferPage = () => {
         fetchOffer()
     }, [id])
 
+    const hasOfferEnded =
+        mainOffer &&
+        mainOffer.auction &&
+        mainOffer.auction.auction_end_time &&
+        new Date(mainOffer.auction.auction_end_time) < new Date()
     return (
         <div className='App'>
             <NavbarComponent />
@@ -60,253 +66,285 @@ const OfferPage = () => {
                     <div
                         className='container d-flex justify-content-center'
                         style={{ width: '80%' }}>
-                        <Card className={css(styles.mainCard)}>
-                            <Card.Body>
-                                <Row>
-                                    <Col md={7}>
-                                        <Card.Title
-                                            className={css(styles.title)}>
-                                            {mainOffer.id} - {mainOffer.brand},{' '}
-                                            {mainOffer.model}
-                                        </Card.Title>
-                                    </Col>
-                                    <Col md={2}>
-                                        <Card.Text
-                                            className={css(
-                                                styles.labelText,
-                                                styles.offerTag,
-                                                styles.adjustableText
-                                            )}
-                                            style={{ marginTop: '0.5rem' }}>
-                                            {formatPrice(mainOffer.price)}
-                                        </Card.Text>
-                                    </Col>
-                                    <Col md={3}>
-                                        <Card.Text
-                                            className={css(
-                                                styles.labelText,
-                                                styles.offerTag,
-                                                styles.adjustableText
-                                            )}
-                                            style={{ marginTop: '0.5rem' }}>
-                                            <TimerComponent
-                                                targetTime={
-                                                    mainOffer.start_time
-                                                }
-                                            />
-                                        </Card.Text>
-                                    </Col>
-                                </Row>
-                                <hr />
-                                <Row>
-                                    {mainOffer.photos && (
-                                        <Col md={8}>
-                                            <Row>
-                                                <Col md={6}>
-                                                    <ImageComponent
-                                                        link={
-                                                            mainOffer.photos[0]
-                                                        }
-                                                        fallbackImage={
-                                                            placeholderImage
-                                                        }
-                                                        className={css(
-                                                            styles.firstImage
-                                                        )}
-                                                    />
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Row>
-                                                        <ImageComponent
-                                                            link={
-                                                                mainOffer
-                                                                    .photos[1]
-                                                            }
-                                                            fallbackImage={
-                                                                placeholderImage
-                                                            }
-                                                            className={css(
-                                                                styles.secondaryImage
-                                                            )}
-                                                            style={{
-                                                                marginBottom:
-                                                                    '1.5rem',
-                                                            }}
-                                                        />
-                                                        <ImageComponent
-                                                            link={
-                                                                mainOffer
-                                                                    .photos[2]
-                                                            }
-                                                            fallbackImage={
-                                                                placeholderImage
-                                                            }
-                                                            className={css(
-                                                                styles.secondaryImage
-                                                            )}
-                                                        />
-                                                    </Row>
-                                                </Col>
-                                                <Col md={3}>
-                                                    <Row>
-                                                        <ImageComponent
-                                                            link={
-                                                                mainOffer
-                                                                    .photos[3]
-                                                            }
-                                                            fallbackImage={
-                                                                placeholderImage
-                                                            }
-                                                            className={css(
-                                                                styles.secondaryImage
-                                                            )}
-                                                            style={{
-                                                                marginBottom:
-                                                                    '1.5rem',
-                                                            }}
-                                                        />
-                                                        <ImageComponent
-                                                            link={
-                                                                mainOffer
-                                                                    .photos[4]
-                                                            }
-                                                            fallbackImage={
-                                                                placeholderImage
-                                                            }
-                                                            className={css(
-                                                                styles.secondaryImage
-                                                            )}
-                                                        />
-                                                    </Row>
-                                                </Col>
-                                            </Row>
-                                        </Col>
-                                    )}
-                                    <Col md={4}>
-                                        <Card.Text
-                                            className={css(
-                                                styles.labelText,
-                                                styles.offerTag,
-                                                styles.adjustableText
-                                            )}>
-                                            Brand: {mainOffer.brand}
-                                        </Card.Text>
-                                        <Card.Text
-                                            className={css(
-                                                styles.labelText,
-                                                styles.offerTag,
-                                                styles.adjustableText
-                                            )}>
-                                            Model: {mainOffer.model}
-                                        </Card.Text>
-                                        <Card.Text
-                                            className={css(
-                                                styles.labelText,
-                                                styles.offerTag,
-                                                styles.adjustableText
-                                            )}>
-                                            Generation: {mainOffer.generation}
-                                        </Card.Text>
-                                        <Card.Text
-                                            className={css(
-                                                styles.labelText,
-                                                styles.offerTag,
-                                                styles.adjustableText
-                                            )}>
-                                            Production year:{' '}
-                                            {mainOffer.production_year}
-                                        </Card.Text>
-                                        <Card.Text
-                                            className={css(
-                                                styles.labelText,
-                                                styles.offerTag,
-                                                styles.adjustableText
-                                            )}>
-                                            Condition: {mainOffer.condition}
-                                        </Card.Text>
-                                        <Card.Text
-                                            className={css(
-                                                styles.labelText,
-                                                styles.offerTag,
-                                                styles.adjustableText
-                                            )}>
-                                            Body: {mainOffer.body_type}
-                                        </Card.Text>
-                                        <Card.Text
-                                            className={css(
-                                                styles.labelText,
-                                                styles.offerTag,
-                                                styles.adjustableText
-                                            )}>
-                                            Fuel: {mainOffer.fuel_type}
-                                        </Card.Text>
-                                        <Card.Text
-                                            className={css(
-                                                styles.labelText,
-                                                styles.offerTag,
-                                                styles.adjustableText
-                                            )}>
-                                            Place: {mainOffer.place}
-                                        </Card.Text>
-                                        <Card.Text
-                                            className={css(
-                                                styles.labelText,
-                                                styles.offerTag,
-                                                styles.adjustableText
-                                            )}>
-                                            Other: {mainOffer.other_info}
-                                        </Card.Text>
-                                    </Col>
-                                </Row>
-                                <br />
-                                <Row>
-                                    <Col md={isAuth ? 10 : 12}>
-                                        <Card.Text
-                                            className={css(
-                                                styles.descriptionText,
-                                                styles.adjustableText
-                                            )}>
-                                            <u
-                                                className={css(
-                                                    styles.adjustableLargeText
-                                                )}
-                                                style={{
-                                                    fontWeight: 'bold',
-                                                    fontSize: '1.5rem',
-                                                }}>
-                                                Description:
-                                            </u>
-                                            <br />
-                                            {mainOffer.description}
-                                        </Card.Text>
-                                    </Col>
-                                    {isAuth &&
-                                        ((mainOffer.is_owner && (
-                                            <Col md={2}>
-                                                <Button
-                                                    variant='primary'
+                        <Row>
+                            {/* Main offer card column */}
+                            <Col md={isAuth && !mainOffer.is_owner ? 10 : 12}>
+                                <Card className={css(styles.mainCard)}>
+                                    <Card.Body>
+                                        <Row>
+                                            <Col md={6}>
+                                                <Card.Title
                                                     className={css(
-                                                        styles.actionButton
-                                                    )}
-                                                    onClick={removeOffer}>
-                                                    Remove offer
-                                                </Button>
-                                            </Col>
-                                        )) || (
-                                            <Col md={2}>
-                                                <Button
-                                                    variant='primary'
-                                                    className={css(
-                                                        styles.actionButton
+                                                        styles.title
                                                     )}>
-                                                    Place a bid
-                                                </Button>
+                                                    {mainOffer.id} -{' '}
+                                                    {mainOffer.brand},{' '}
+                                                    {mainOffer.model}
+                                                </Card.Title>
                                             </Col>
-                                        ))}
-                                </Row>
-                            </Card.Body>
-                        </Card>
-                        {/* <OfferList offers = {similarOffers} style={{ width: '50%' }}/> */}
+                                            <Col md={3}>
+                                                <Card.Text
+                                                    className={css(
+                                                        styles.labelText,
+                                                        styles.offerTag,
+                                                        styles.adjustableText
+                                                    )}
+                                                    style={{
+                                                        marginTop: '0.5rem',
+                                                    }}>
+                                                    Initial price:{' '}
+                                                    {formatPrice(
+                                                        mainOffer.price
+                                                    )}
+                                                </Card.Text>
+                                            </Col>
+                                            <Col md={3}>
+                                                <Card.Text
+                                                    className={css(
+                                                        styles.labelText,
+                                                        styles.offerTag,
+                                                        styles.adjustableText
+                                                    )}
+                                                    style={{
+                                                        marginTop: '0.5rem',
+                                                    }}>
+                                                    {hasOfferEnded ? (
+                                                        <span
+                                                            style={{
+                                                                color: '#dc3545',
+                                                            }}>
+                                                            Offer expired
+                                                        </span>
+                                                    ) : (
+                                                        <>
+                                                            Starts in:{' '}
+                                                            <TimerComponent
+                                                                targetTime={
+                                                                    mainOffer.start_time
+                                                                }
+                                                            />
+                                                        </>
+                                                    )}
+                                                </Card.Text>
+                                            </Col>
+                                        </Row>
+                                        <hr />
+                                        <Row>
+                                            {mainOffer.photos && (
+                                                <Col md={8}>
+                                                    <Row>
+                                                        <Col md={6}>
+                                                            <ImageComponent
+                                                                link={
+                                                                    mainOffer
+                                                                        .photos[0]
+                                                                }
+                                                                fallbackImage={
+                                                                    placeholderImage
+                                                                }
+                                                                className={css(
+                                                                    styles.firstImage
+                                                                )}
+                                                            />
+                                                        </Col>
+                                                        <Col md={3}>
+                                                            <Row>
+                                                                <ImageComponent
+                                                                    link={
+                                                                        mainOffer
+                                                                            .photos[1]
+                                                                    }
+                                                                    fallbackImage={
+                                                                        placeholderImage
+                                                                    }
+                                                                    className={css(
+                                                                        styles.secondaryImage
+                                                                    )}
+                                                                    style={{
+                                                                        marginBottom:
+                                                                            '1.5rem',
+                                                                    }}
+                                                                />
+                                                                <ImageComponent
+                                                                    link={
+                                                                        mainOffer
+                                                                            .photos[2]
+                                                                    }
+                                                                    fallbackImage={
+                                                                        placeholderImage
+                                                                    }
+                                                                    className={css(
+                                                                        styles.secondaryImage
+                                                                    )}
+                                                                />
+                                                            </Row>
+                                                        </Col>
+                                                        <Col md={3}>
+                                                            <Row>
+                                                                <ImageComponent
+                                                                    link={
+                                                                        mainOffer
+                                                                            .photos[3]
+                                                                    }
+                                                                    fallbackImage={
+                                                                        placeholderImage
+                                                                    }
+                                                                    className={css(
+                                                                        styles.secondaryImage
+                                                                    )}
+                                                                    style={{
+                                                                        marginBottom:
+                                                                            '1.5rem',
+                                                                    }}
+                                                                />
+                                                                <ImageComponent
+                                                                    link={
+                                                                        mainOffer
+                                                                            .photos[4]
+                                                                    }
+                                                                    fallbackImage={
+                                                                        placeholderImage
+                                                                    }
+                                                                    className={css(
+                                                                        styles.secondaryImage
+                                                                    )}
+                                                                />
+                                                            </Row>
+                                                        </Col>
+                                                    </Row>
+                                                </Col>
+                                            )}
+                                            <Col md={4}>
+                                                <Card.Text
+                                                    className={css(
+                                                        styles.labelText,
+                                                        styles.offerTag,
+                                                        styles.adjustableText
+                                                    )}>
+                                                    Brand: {mainOffer.brand}
+                                                </Card.Text>
+                                                <Card.Text
+                                                    className={css(
+                                                        styles.labelText,
+                                                        styles.offerTag,
+                                                        styles.adjustableText
+                                                    )}>
+                                                    Model: {mainOffer.model}
+                                                </Card.Text>
+                                                <Card.Text
+                                                    className={css(
+                                                        styles.labelText,
+                                                        styles.offerTag,
+                                                        styles.adjustableText
+                                                    )}>
+                                                    Generation:{' '}
+                                                    {mainOffer.generation}
+                                                </Card.Text>
+                                                <Card.Text
+                                                    className={css(
+                                                        styles.labelText,
+                                                        styles.offerTag,
+                                                        styles.adjustableText
+                                                    )}>
+                                                    Production year:{' '}
+                                                    {mainOffer.production_year}
+                                                </Card.Text>
+                                                <Card.Text
+                                                    className={css(
+                                                        styles.labelText,
+                                                        styles.offerTag,
+                                                        styles.adjustableText
+                                                    )}>
+                                                    Condition:{' '}
+                                                    {mainOffer.condition}
+                                                </Card.Text>
+                                                <Card.Text
+                                                    className={css(
+                                                        styles.labelText,
+                                                        styles.offerTag,
+                                                        styles.adjustableText
+                                                    )}>
+                                                    Body: {mainOffer.body_type}
+                                                </Card.Text>
+                                                <Card.Text
+                                                    className={css(
+                                                        styles.labelText,
+                                                        styles.offerTag,
+                                                        styles.adjustableText
+                                                    )}>
+                                                    Fuel: {mainOffer.fuel_type}
+                                                </Card.Text>
+                                                <Card.Text
+                                                    className={css(
+                                                        styles.labelText,
+                                                        styles.offerTag,
+                                                        styles.adjustableText
+                                                    )}>
+                                                    Place: {mainOffer.place}
+                                                </Card.Text>
+                                                <Card.Text
+                                                    className={css(
+                                                        styles.labelText,
+                                                        styles.offerTag,
+                                                        styles.adjustableText
+                                                    )}>
+                                                    Other:{' '}
+                                                    {mainOffer.other_info}
+                                                </Card.Text>
+                                            </Col>
+                                        </Row>
+                                        <br />
+                                        <Row>
+                                            <Col md={isAuth ? 10 : 12}>
+                                                <Card.Text
+                                                    className={css(
+                                                        styles.descriptionText,
+                                                        styles.adjustableText
+                                                    )}>
+                                                    <u
+                                                        className={css(
+                                                            styles.adjustableLargeText
+                                                        )}
+                                                        style={{
+                                                            fontWeight: 'bold',
+                                                            fontSize: '1.5rem',
+                                                        }}>
+                                                        Description:
+                                                    </u>
+                                                    <br />
+                                                    {mainOffer.description}
+                                                </Card.Text>
+                                            </Col>
+                                            {isAuth && mainOffer.is_owner && (
+                                                <Col md={2}>
+                                                    <Button
+                                                        variant='primary'
+                                                        className={css(
+                                                            styles.actionButton
+                                                        )}
+                                                        onClick={removeOffer}>
+                                                        Remove offer
+                                                    </Button>
+                                                </Col>
+                                            )}
+                                        </Row>
+                                    </Card.Body>
+                                </Card>
+                            </Col>
+
+                            {/* Bid tile column - show only for authenticated non-owners when auction exists */}
+                            {isAuth &&
+                                !mainOffer.is_owner &&
+                                mainOffer.auction && (
+                                    <Col md={2}>
+                                        <BidTile
+                                            offerId={mainOffer.id}
+                                            startTime={mainOffer.start_time}
+                                            auctionData={mainOffer.auction}
+                                        />
+                                    </Col>
+                                )}
+                        </Row>
                     </div>
                 )}
             </header>

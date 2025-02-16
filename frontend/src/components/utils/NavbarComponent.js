@@ -1,16 +1,18 @@
 // libs
 import React, { useState } from 'react'
 import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap'
-import { Link, useNavigate, useLocation } from 'react-router-dom' // Add useLocation
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 // local components
 import handleLogout from './LogoutAction'
+import UserDisplay from './UserDisplay'
 
 const NavbarComponent = () => {
     const isAuth = localStorage.getItem('accessToken') !== null
+    const username = localStorage.getItem('username')
     const navigate = useNavigate()
     const [searchQuery, setSearchQuery] = useState('')
-    const location = useLocation() // Add this hook
+    const location = useLocation()
 
     const handleSearch = (e) => {
         e.preventDefault()
@@ -84,6 +86,7 @@ const NavbarComponent = () => {
                         Search
                     </Button>
                 </Form>
+                <UserDisplay username={username} />
             </Navbar.Collapse>
         </Navbar>
     )

@@ -14,7 +14,8 @@ const handleLogout = async (navigate) => {
     } finally {
         localStorage.removeItem('accessToken')
         localStorage.removeItem('refreshToken')
-        navigate('/')
+        localStorage.removeItem('username')
+        if (navigate) navigate('/')
     }
 }
 

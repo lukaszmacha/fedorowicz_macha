@@ -45,7 +45,7 @@ class PlaceBidView(APIView):
             auction = offer.auction
 
             # Jeśli aukcja jeszcze nie wystartowała (pierwszy bid)
-            if not auction.has_started:
+            if not auction.has_started and not auction.auction_end_time:
                 required_minimum = offer.price + Decimal('100.00')
                 if bid_amount < required_minimum:
                     return Response(
@@ -55,7 +55,7 @@ class PlaceBidView(APIView):
                 # Rozpoczynamy aukcję
                 auction.current_price = bid_amount
                 auction.current_winner = request.user
-                auction.auction_end_time = now_time + timedelta(seconds=10)
+                auction.auction_end_time = now_time + timedelta(seconds=60)
                 auction.has_started = True
                 auction.save()
                 Bid.objects.create(auction=auction, user=request.user, bid_price=bid_amount)
@@ -63,7 +63,6 @@ class PlaceBidView(APIView):
                 # Aukcja już wystartowała – sprawdzamy, czy nie upłynął czas
                 if now_time > auction.auction_end_time:
                     # Możesz tutaj również zakończyć aukcję
-                    auction.has_started = False
                     auction.save()
                     return Response(
                         {"error": "Aukcja się zakończyła."},
