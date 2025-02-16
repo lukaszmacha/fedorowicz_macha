@@ -32,6 +32,7 @@ const LoginPage = () => {
             const { refresh, access } = response.data
             localStorage.setItem('refreshToken', refresh)
             localStorage.setItem('accessToken', access)
+            localStorage.setItem('username', username)
             setMessage('Login successful!')
             window.location.href = '/'
         } catch (error) {

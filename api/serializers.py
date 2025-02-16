@@ -3,12 +3,19 @@ from django.contrib.auth.models import User
 from api.models import Offer
 from api.models import Auction, Bid
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username']
+
 class AuctionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Auction
         fields = ['offer', 'current_price', 'current_winner', 'auction_end_time', 'active', 'created_at']
 
 class AuctionInfoSerializer(serializers.ModelSerializer):
+    current_winner = UserSerializer(read_only=True)
+
     class Meta:
         model = Auction
         fields = ['id', 'current_price', 'auction_end_time', 'has_started', 'current_winner']
