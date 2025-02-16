@@ -1,6 +1,6 @@
 // libs
 import React, { useState } from 'react'
-import { Form, Button, Container, Card, Row, Col } from 'react-bootstrap'
+import { Form, Button, Container, Card, Row, Col, Alert } from 'react-bootstrap'
 
 // local components
 import NavbarComponent from '../components/utils/NavbarComponent'
@@ -9,7 +9,13 @@ import apiEndpoint from '../components/utils/ApiEndpoint'
 // assets
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+// constants
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB in bytes
+const MAX_TOTAL_SIZE = 10 * 1024 * 1024 // 10MB in bytes
+
 const AddOfferPage = () => {
+    const [error, setError] = useState('')
+    const [isUploading, setIsUploading] = useState(false)
     const [formData, setFormData] = useState({
         brand: '',
         model: '',
@@ -23,6 +29,7 @@ const AddOfferPage = () => {
         other_info: '',
         place: '',
         photos: [],
+        start_time: new Date().toISOString().slice(0, 16), // Current time in format YYYY-MM-DDTHH:mm
     })
 
     const handleChange = (e) => {
@@ -34,23 +41,86 @@ const AddOfferPage = () => {
     }
 
     const handleFileChange = (e) => {
-        setFormData((prevState) => ({
-            ...prevState,
-            photos: Array.from(e.target.files),
-        }))
+        const files = Array.from(e.target.files)
+        const totalSize = files.reduce((acc, file) => acc + file.size, 0)
+
+        // Validate individual file sizes
+        const oversizedFiles = files.filter((file) => file.size > MAX_FILE_SIZE)
+        if (oversizedFiles.length > 0) {
+            setError(`Some files are too large. Maximum size per file is 5MB`)
+            return
+        }
+
+        // Validate total size
+        if (totalSize > MAX_TOTAL_SIZE) {
+            setError(`Total file size exceeds 10MB limit`)
+            return
+        }
+
+        setFormData({
+            ...formData,
+            photos: files,
+        })
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setIsUploading(true)
+
+        // Add start time validation
+        const startTime = new Date(formData.start_time)
+        const now = new Date()
+        if (startTime <= now) {
+            setError('Start time must be in the future')
+            setIsUploading(false)
+            return
+        }
+
         try {
-            const response = await apiEndpoint.post('/offer/create/', formData)
+            const formDataToSend = new FormData()
+
+            // Add regular fields including start_time
+            Object.keys(formData).forEach((key) => {
+                if (key !== 'photos') {
+                    // Convert start_time to ISO string
+                    const value =
+                        key === 'start_time'
+                            ? new Date(formData[key]).toISOString()
+                            : formData[key]
+                    formDataToSend.append(key, value)
+                }
+            })
+
+            // Add photos with compression if needed
+            await Promise.all(
+                formData.photos.map(async (photo) => {
+                    if (photo.size > MAX_FILE_SIZE) {
+                        // You might want to add image compression here
+                        // using libraries like browser-image-compression
+                    }
+                    formDataToSend.append('photos', photo)
+                })
+            )
+
+            const response = await apiEndpoint.post(
+                '/offer/create/',
+                formDataToSend,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            )
+
             if (response.status === 201 && response.data.payment_link) {
                 window.location.href = response.data.payment_link.url
             } else {
-                console.error('Payment link not received from server')
+                setError('Payment link not received from server')
             }
         } catch (error) {
-            console.error('Error creating offer:', error)
+            setError(error.response?.data?.message || 'Error creating offer')
+        } finally {
+            setIsUploading(false)
         }
     }
 
@@ -271,6 +341,26 @@ const AddOfferPage = () => {
                                                 onChange={handleChange}
                                             />
                                         </Form.Group>
+
+                                        <Form.Group className='mb-3'>
+                                            <Form.Label>
+                                                Auction Start Time
+                                            </Form.Label>
+                                            <Form.Control
+                                                type='datetime-local'
+                                                name='start_time'
+                                                value={formData.start_time}
+                                                onChange={handleChange}
+                                                min={new Date()
+                                                    .toISOString()
+                                                    .slice(0, 16)}
+                                                required
+                                            />
+                                            <Form.Text className='text-muted'>
+                                                Select when the auction should
+                                                start. Must be in the future.
+                                            </Form.Text>
+                                        </Form.Group>
                                     </Col>
 
                                     {/* Right Column - Photos */}
@@ -303,11 +393,20 @@ const AddOfferPage = () => {
                                     </Col>
                                 </Row>
 
+                                {error && (
+                                    <Alert variant='danger' className='mt-3'>
+                                        {error}
+                                    </Alert>
+                                )}
+
                                 <Button
                                     variant='primary'
                                     type='submit'
-                                    className='w-100 mt-3'>
-                                    Create Offer
+                                    className='w-100 mt-3'
+                                    disabled={isUploading}>
+                                    {isUploading
+                                        ? 'Creating Offer...'
+                                        : 'Create Offer'}
                                 </Button>
                             </Form>
                         </Card.Body>

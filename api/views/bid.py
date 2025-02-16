@@ -77,7 +77,10 @@ class PlaceBidView(APIView):
                     )
                 auction.current_price = bid_amount
                 auction.current_winner = request.user
-                auction.auction_end_time = now_time + timedelta(seconds=10)
+                if auction.auction_end_time + timedelta(seconds=10) > now_time + timedelta(minutes=1):
+                    auction.auction_end_time = now_time + timedelta(minutes=1)
+                else:
+                    auction.auction_end_time += timedelta(seconds=10)
                 auction.save()
                 Bid.objects.create(auction=auction, user=request.user, bid_price=bid_amount)
 

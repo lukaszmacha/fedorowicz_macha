@@ -7,6 +7,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.utils.timezone import now
 from django.conf import settings
 import stripe
+from django.core.files.storage import default_storage
+import os
+from uuid import uuid4
+from datetime import datetime
 
 from api.models import Offer, Auction
 from api.serializers import OfferListSerializer, OfferDetailSerializer, OfferSerializer
@@ -47,32 +51,67 @@ class CreateOfferView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        serializer = OfferSerializer(data=request.data)
-        if serializer.is_valid():
-            offer = serializer.save(user=request.user)
-            Auction.objects.create(
-                offer=offer,
-                current_price=offer.price,
-                has_started=False,
-                auction_end_time=None
-            )  
-            payment_link = stripe.PaymentLink.create(
-                line_items=[
-                    {"price": "price_1QjdWiP4Lupois9HdZ9rAASr", "quantity": 1}
-                ],
-                metadata={"offer_id": offer.pk},
-                after_completion={
-                    "type": "redirect",
-                    "redirect": {"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
-                }
+
+        try:
+            # Get the photos from request.FILES
+            photos = request.FILES.getlist('photos')
+            photo_urls = []
+            
+            # Handle photo uploads first
+            for photo in photos:
+                # Generate unique filename using timestamp and UUID
+                timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+                unique_id = str(uuid4())[:8]  # First 8 chars of UUID
+                original_name = os.path.splitext(photo.name)[0]  # Get name without extension
+                extension = os.path.splitext(photo.name)[1]  # Get file extension
+                filename = f"{request.user.id}_{timestamp}_{unique_id}_{original_name}{extension}"
+                # Save file and get URL
+                file_path = default_storage.save(f'offers/{filename}', photo)
+                full_url = request.build_absolute_uri(default_storage.url(file_path))
+                full_url = full_url.replace('localhost', 'localhost:1331')
+                photo_urls.append(full_url)
+            
+            # Create new data dictionary instead of copying request.data
+            data = {}
+            for key in request.data:
+                if key != 'photos':  # Skip the photos field
+                    data[key] = request.data[key]
+            
+            # Add the photo URLs to the data
+            data['photos'] = photo_urls
+
+            serializer = OfferSerializer(data=data)
+            if serializer.is_valid():
+                offer = serializer.save(user=request.user)
+                Auction.objects.create(
+                    offer=offer,
+                    current_price=offer.price,
+                    has_started=False,
+                    auction_end_time=None
+                )  
+                payment_link = stripe.PaymentLink.create(
+                    line_items=[
+                        {"price": "price_1QjdWiP4Lupois9HdZ9rAASr", "quantity": 1}
+                    ],
+                    metadata={"offer_id": offer.pk},
+                    after_completion={
+                        "type": "redirect",
+                        "redirect": {"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
+                    }
+                )
+
+                return Response({"id": offer.id, "payment_link": payment_link}, status=201)
+
+            else:
+                print("Serializer errors:", serializer.errors)
+                return Response(serializer.errors, status=400)
+
+        except Exception as e:
+            print(f"Error creating offer: {str(e)}")
+            return Response(
+                {"error": "Failed to create offer"}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-
-            return Response({"id": offer.id, "payment_link": payment_link}, status=201)
-
-        return Response(serializer.errors, status=400)
-
-
-
 
 class DeleteOfferView(APIView):
     """

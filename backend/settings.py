@@ -130,6 +130,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -157,3 +160,12 @@ CHANNEL_LAYERS = {
 }
 
 ASGI_APPLICATION = "backend.asgi.application"
+
+# Maximum size of the entire request (in bytes)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
+
+# Maximum size of each file (in bytes)
+FILE_UPLOAD_MAX_SIZE = 5242880  # 5MB
+
+# Maximum number of files that can be uploaded at once
+FILE_UPLOAD_MAX_NUMBER_FILES = 10
