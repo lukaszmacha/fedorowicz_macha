@@ -5,7 +5,7 @@ class AuctionConsumer(AsyncJsonWebsocketConsumer):
         self.auction_id = self.scope['url_route']['kwargs']['auction_id']
         self.auction_group_name = f'auction_{self.auction_id}'
 
-        # Dołącz do grupy aukcji
+        # Join auction group
         await self.channel_layer.group_add(
             self.auction_group_name,
             self.channel_name
@@ -13,12 +13,12 @@ class AuctionConsumer(AsyncJsonWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        # Opuść grupę aukcji
+        # Leave auction group
         await self.channel_layer.group_discard(
             self.auction_group_name,
             self.channel_name
         )
 
     async def auction_update(self, event):
-        # Prześlij wiadomość do klienta WebSocket
+        # Send message to WebSocket client
         await self.send_json(event['data'])

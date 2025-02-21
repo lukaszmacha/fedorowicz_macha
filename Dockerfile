@@ -1,20 +1,20 @@
-# Wybieramy bazowy obraz z Pythonem (np. 3.11)
+# Choose base Python image (e.g. 3.11)
 FROM python:3.11-slim
 
-# Ustalamy katalog roboczy w kontenerze
+# Set working directory in container
 WORKDIR /app
 
-# Kopiujemy plik requirements.txt
+# Copy requirements.txt file
 COPY requirements.txt ./
 
-# Instalujemy zależności
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Kopiujemy całą zawartość folderu lokalnego (z backend, manage.py itp.) do /app w kontenerze
+# Copy all local folder contents to /app in container
 COPY . .
 
-# Otwieramy port (opcjonalnie; pomaga zrozumieć, który port jest eksponowany)
+# Open port (optional; helps understand which port is exposed)
 EXPOSE 8000
 
-# Domyślna komenda (entrypoint) – do uruchamiania serwera w trybie dev
+# Default command (entrypoint) - for running server in dev mode
 CMD ["uvicorn", "backend.asgi:application", "--host", "0.0.0.0", "--port", "8000", "--reload"]

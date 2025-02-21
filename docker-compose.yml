@@ -1,64 +1,64 @@
 services:
-  db:
-    image: postgres:15
-    container_name: my_project_db
-    environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypass
-      POSTGRES_DB: mydb
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    # Opcjonalnie restart policy
-    restart: unless-stopped
+    db:
+        image: postgres:15
+        container_name: my_project_db
+        environment:
+            POSTGRES_USER: myuser
+            POSTGRES_PASSWORD: mypass
+            POSTGRES_DB: mydb
+        ports:
+            - '5432:5432'
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        # Optional restart policy
+        restart: unless-stopped
 
-  web:
-    build: .
-    container_name: my_project_web
-    command: uvicorn backend.asgi:application --host 0.0.0.0 --port 8000 --reload
-    volumes:
-      - .:/app  # Montujemy kod lokalny do kontenera (ułatwia development)
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-    environment:
-      # Wskazanie parametrów do połączenia z bazą
-      DB_NAME: mydb
-      DB_USER: myuser
-      DB_PASSWORD: mypass
-      DB_HOST: db
-      DB_PORT: 5432
-      STRIPE_SECRET_KEY:  sk_test_51PquArP4Lupois9Hm5DHwAKuGXmPWbstcBCwLYsyJPloGS1qdRVYs9wjcz9zN3xzJ5NY2UquAlUldFjpoz3CVW9t00HrjEaUL2
-      STRIPE_PUBLISHABLE_KEY: pk_test_51PquArP4Lupois9HFOq1gLdywLcnGUJQapuI9E26NR3qy1k0JnPBJ2p3HEoChhZ1KMAvfcRs6zAbopTdMWy52shO00FxVb9xed
-      STRIPE_WEBHOOK_SECRET: whsec_a7ZbgHUTKRfHtL9Hf8cprYj8zVqFlnyn
+    web:
+        build: .
+        container_name: my_project_web
+        command: uvicorn backend.asgi:application --host 0.0.0.0 --port 8000 --reload
+        volumes:
+            - .:/app
+        ports:
+            - '8000:8000'
+        depends_on:
+            - db
+        environment:
+            # Data base connections parameters
+            DB_NAME: mydb
+            DB_USER: myuser
+            DB_PASSWORD: mypass
+            DB_HOST: db
+            DB_PORT: 5432
+            STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+            STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}
+            STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
 
-  proxy:
-    build:
-      context: ./proxy
-      dockerfile: proxy.docker
-    container_name: cors_proxy
-    ports:
-      - "1331:1331"
-    depends_on:
-      - web
+    proxy:
+        build:
+            context: ./proxy
+            dockerfile: proxy.docker
+        container_name: cors_proxy
+        ports:
+            - '1331:1331'
+        depends_on:
+            - web
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: frontend.docker
-    container_name: frontend_app
-    ports:
-      - "3000:3000"
-    depends_on:
-      - proxy
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=development
-    restart: unless-stopped
+    frontend:
+        build:
+            context: ./frontend
+            dockerfile: frontend.docker
+        container_name: frontend_app
+        ports:
+            - '3000:3000'
+        depends_on:
+            - proxy
+        volumes:
+            - ./frontend:/app
+            - /app/node_modules
+        environment:
+            - NODE_ENV=development
+        restart: unless-stopped
 
 volumes:
-  postgres_data:
+    postgres_data:

@@ -14,13 +14,11 @@ import BidTile from '../components/offer/BidTile'
 // assets
 import 'bootstrap/dist/css/bootstrap.min.css'
 import placeholderImage from '../assets/images/placeholder.png'
-// import OfferList from '../components/offer/OfferList'; to introduce further
 
 const OfferPage = () => {
     const isAuth = localStorage.getItem('accessToken') !== null
     const { id } = useParams()
     const [mainOffer, setMainOffer] = useState(null)
-    //const [similarOffers, setSimilarOffers] = useState([]);
 
     const removeOffer = async () => {
         try {
@@ -43,7 +41,6 @@ const OfferPage = () => {
         const fetchOffer = async () => {
             try {
                 setMainOffer((await apiEndpoint.get(`/offers/${id}`)).data)
-                //setSimilarOffers((await apiEndpoint.get('/offers')).data.results);
             } catch (error) {
                 console.error(`Error fetching offer: ${error.message}`)
             }

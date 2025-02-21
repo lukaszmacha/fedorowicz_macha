@@ -22,9 +22,9 @@ const AddOfferPage = () => {
         generation: '',
         production_year: '',
         price: '',
-        condition: 'NOWY',
+        condition: 'NEW',
         body_type: 'SEDAN',
-        fuel_type: 'BENZYNA',
+        fuel_type: 'PETROL',
         description: '',
         other_info: '',
         place: '',
@@ -67,7 +67,6 @@ const AddOfferPage = () => {
         e.preventDefault()
         setIsUploading(true)
 
-        // Add start time validation
         const startTime = new Date(formData.start_time)
         const now = new Date()
         if (startTime <= now) {
@@ -91,13 +90,8 @@ const AddOfferPage = () => {
                 }
             })
 
-            // Add photos with compression if needed
             await Promise.all(
                 formData.photos.map(async (photo) => {
-                    if (photo.size > MAX_FILE_SIZE) {
-                        // You might want to add image compression here
-                        // using libraries like browser-image-compression
-                    }
                     formDataToSend.append('photos', photo)
                 })
             )
@@ -240,10 +234,10 @@ const AddOfferPage = () => {
                                                             formData.condition
                                                         }
                                                         onChange={handleChange}>
-                                                        <option value='NOWY'>
+                                                        <option value='NEW'>
                                                             New
                                                         </option>
-                                                        <option value='UZYWANY'>
+                                                        <option value='USED'>
                                                             Used
                                                         </option>
                                                     </Form.Select>
@@ -266,8 +260,8 @@ const AddOfferPage = () => {
                                                         <option value='SEDAN'>
                                                             Sedan
                                                         </option>
-                                                        <option value='KOMBI'>
-                                                            Kombi
+                                                        <option value='COMBI'>
+                                                            Estate
                                                         </option>
                                                         <option value='SUV'>
                                                             SUV
@@ -289,7 +283,7 @@ const AddOfferPage = () => {
                                                             formData.fuel_type
                                                         }
                                                         onChange={handleChange}>
-                                                        <option value='BENZYNA'>
+                                                        <option value='PETROL'>
                                                             Petrol
                                                         </option>
                                                         <option value='DIESEL'>

@@ -1,11 +1,11 @@
 // libs
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 
 // local components
 import Offer from '../components/offer/OfferTile'
 import OfferList from '../components/offer/OfferList'
 import NavbarComponent from '../components/utils/NavbarComponent'
+import apiEndpoint from '../components/utils/ApiEndpoint'
 
 // assets
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -14,8 +14,8 @@ const StartingPage = () => {
     const [offerValues, setOfferValues] = useState([])
 
     useEffect(() => {
-        axios
-            .get('http://localhost:1331/api/offers/')
+        apiEndpoint
+            .get('/offers/')
             .then((response) => {
                 if (Array.isArray(response.data.results)) {
                     setOfferValues(response.data.results.slice(0, 4))

@@ -18,15 +18,15 @@ const OfferBrowserPage = () => {
         priceRange: '',
     })
     const [filters, setFilters] = useState({
-        marka: '',
+        brand: '',
         model: '',
-        cena_od: '',
-        cena_do: '',
-        rok_produkcji_od: '',
-        rok_produkcji_do: '',
-        stan: '',
-        typ_nadwozia: '',
-        rodzaj_paliwa: '',
+        price_from: '',
+        price_to: '',
+        year_from: '',
+        year_to: '',
+        condition: '',
+        body_type: '',
+        fuel_type: '',
     })
 
     const handleFilterChange = (e) => {
@@ -38,16 +38,13 @@ const OfferBrowserPage = () => {
             }
 
             // Validate year range
-            if (name === 'rok_produkcji_od' || name === 'rok_produkcji_do') {
-                if (
-                    newFilters.rok_produkcji_od &&
-                    newFilters.rok_produkcji_do
-                ) {
+            if (name === 'year_from' || name === 'year_to') {
+                if (newFilters.year_from && newFilters.year_to) {
                     setErrors((prev) => ({
                         ...prev,
                         yearRange:
-                            Number(newFilters.rok_produkcji_od) >
-                            Number(newFilters.rok_produkcji_do)
+                            Number(newFilters.year_from) >
+                            Number(newFilters.year_to)
                                 ? 'Year From cannot be greater than Year To'
                                 : '',
                     }))
@@ -55,13 +52,13 @@ const OfferBrowserPage = () => {
             }
 
             // Validate price range
-            if (name === 'cena_od' || name === 'cena_do') {
-                if (newFilters.cena_od && newFilters.cena_do) {
+            if (name === 'price_from' || name === 'price_to') {
+                if (newFilters.price_from && newFilters.price_to) {
                     setErrors((prev) => ({
                         ...prev,
                         priceRange:
-                            Number(newFilters.cena_od) >
-                            Number(newFilters.cena_do)
+                            Number(newFilters.price_from) >
+                            Number(newFilters.price_to)
                                 ? 'Price From cannot be greater than Price To'
                                 : '',
                     }))
@@ -100,10 +97,10 @@ const OfferBrowserPage = () => {
                 const words = searchString.trim().split(/\s+/)
                 const searchPromises = words.flatMap((word) => [
                     apiEndpoint.get(
-                        `/offers/?marka=${encodeURIComponent(word)}`
+                        `/offers/?brand=${encodeURIComponent(word)}`
                     ),
                     apiEndpoint.get(
-                        `/offers/?model=${encodeURIComponent(word)}`
+                        `/offers/?brand=${encodeURIComponent(word)}`
                     ),
                 ])
 
@@ -160,8 +157,8 @@ const OfferBrowserPage = () => {
                                             <Form.Control
                                                 placeholder='e.g. BMW'
                                                 type='text'
-                                                name='marka'
-                                                value={filters.marka}
+                                                name='brand'
+                                                value={filters.brand}
                                                 onChange={handleFilterChange}
                                             />
                                         </Form.Group>
@@ -182,14 +179,12 @@ const OfferBrowserPage = () => {
                                         <Form.Group className='mb-3'>
                                             <Form.Label>Condition</Form.Label>
                                             <Form.Select
-                                                name='stan'
-                                                value={filters.stan}
+                                                name='condition'
+                                                value={filters.condition}
                                                 onChange={handleFilterChange}>
                                                 <option value=''>Any</option>
-                                                <option value='NOWY'>
-                                                    New
-                                                </option>
-                                                <option value='UZYWANY'>
+                                                <option value='NEW'>New</option>
+                                                <option value='USED'>
                                                     Used
                                                 </option>
                                             </Form.Select>
@@ -203,8 +198,8 @@ const OfferBrowserPage = () => {
                                             <Form.Control
                                                 placeholder='e.g. 5000'
                                                 type='number'
-                                                name='cena_od'
-                                                value={filters.cena_od}
+                                                name='price_from'
+                                                value={filters.price_from}
                                                 onChange={handleFilterChange}
                                                 min={1000}
                                                 isInvalid={!!errors.priceRange}
@@ -225,8 +220,8 @@ const OfferBrowserPage = () => {
                                             <Form.Control
                                                 placeholder='e.g. 25000'
                                                 type='number'
-                                                name='cena_do'
-                                                value={filters.cena_do}
+                                                name='price_to'
+                                                value={filters.price_to}
                                                 onChange={handleFilterChange}
                                                 min={1000}
                                                 isInvalid={!!errors.priceRange}
@@ -244,8 +239,8 @@ const OfferBrowserPage = () => {
                                             <Form.Control
                                                 placeholder='e.g. 2003'
                                                 type='number'
-                                                name='rok_produkcji_od'
-                                                value={filters.rok_produkcji_od}
+                                                name='year_from'
+                                                value={filters.year_from}
                                                 onChange={handleFilterChange}
                                                 min={1900}
                                                 max={currentYear}
@@ -267,8 +262,8 @@ const OfferBrowserPage = () => {
                                             <Form.Control
                                                 placeholder='e.g. 2012'
                                                 type='number'
-                                                name='rok_produkcji_do'
-                                                value={filters.rok_produkcji_do}
+                                                name='year_to'
+                                                value={filters.year_to}
                                                 onChange={handleFilterChange}
                                                 min={1900}
                                                 max={currentYear}
@@ -290,15 +285,15 @@ const OfferBrowserPage = () => {
                                         <Form.Group className='mb-3'>
                                             <Form.Label>Body Type</Form.Label>
                                             <Form.Select
-                                                name='typ_nadwozia'
-                                                value={filters.typ_nadwozia}
+                                                name='body_type'
+                                                value={filters.body_type}
                                                 onChange={handleFilterChange}>
                                                 <option value=''>Any</option>
                                                 <option value='SEDAN'>
                                                     Sedan
                                                 </option>
-                                                <option value='KOMBI'>
-                                                    Kombi
+                                                <option value='COMBI'>
+                                                    Estate
                                                 </option>
                                                 <option value='SUV'>SUV</option>
                                                 <option value='HATCHBACK'>
@@ -311,11 +306,11 @@ const OfferBrowserPage = () => {
                                         <Form.Group className='mb-3'>
                                             <Form.Label>Fuel Type</Form.Label>
                                             <Form.Select
-                                                name='rodzaj_paliwa'
-                                                value={filters.rodzaj_paliwa}
+                                                name='fuel_type'
+                                                value={filters.fuel_type}
                                                 onChange={handleFilterChange}>
                                                 <option value=''>Any</option>
-                                                <option value='BENZYNA'>
+                                                <option value='PETROL'>
                                                     Petrol
                                                 </option>
                                                 <option value='DIESEL'>

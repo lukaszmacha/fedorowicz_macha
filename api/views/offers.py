@@ -61,11 +61,10 @@ class CreateOfferView(APIView):
             for photo in photos:
                 # Generate unique filename using timestamp and UUID
                 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-                unique_id = str(uuid4())[:8]  # First 8 chars of UUID
-                original_name = os.path.splitext(photo.name)[0]  # Get name without extension
-                extension = os.path.splitext(photo.name)[1]  # Get file extension
+                unique_id = str(uuid4())[:8]
+                original_name = os.path.splitext(photo.name)[0]
+                extension = os.path.splitext(photo.name)[1]
                 filename = f"{request.user.id}_{timestamp}_{unique_id}_{original_name}{extension}"
-                # Save file and get URL
                 file_path = default_storage.save(f'offers/{filename}', photo)
                 full_url = request.build_absolute_uri(default_storage.url(file_path))
                 full_url = full_url.replace('localhost', 'localhost:1331')
@@ -74,7 +73,7 @@ class CreateOfferView(APIView):
             # Create new data dictionary instead of copying request.data
             data = {}
             for key in request.data:
-                if key != 'photos':  # Skip the photos field
+                if key != 'photos':
                     data[key] = request.data[key]
             
             # Add the photo URLs to the data
@@ -96,7 +95,7 @@ class CreateOfferView(APIView):
                     metadata={"offer_id": offer.pk},
                     after_completion={
                         "type": "redirect",
-                        "redirect": {"url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
+                        "redirect": {"url": "http://localhost:3000"}
                     }
                 )
 

@@ -5,23 +5,24 @@ from django.contrib.auth import get_user_model
 from django.utils.timezone import now
 
 CONDITION_CHOICES = (
-    ('NOWY', 'Nowy'),
-    ('UZYWANY', 'Używany'),
+    ('NEW', 'New'),
+    ('USED', 'Used'),
 )
 
 BODY_TYPE_CHOICES = (
     ('SEDAN', 'Sedan'),
-    ('HATCHBACK', 'Hatchback'),
+    ('HATCHBACK', 'Hatchback'), 
     ('SUV', 'SUV'),
-    ('COMBI', 'Kombi'),
+    ('COMBI', 'Estate'),
 )
 
 FUEL_TYPE_CHOICES = (
-    ('BENZYNA', 'Benzyna'),
+    ('PETROL', 'Petrol'),
     ('DIESEL', 'Diesel'),
-    ('HYBRYDA', 'Hybryda'),
-    ('ELEKTRYCZNY', 'Elektryczny'),
+    ('HYBRID', 'Hybrid'),
+    ('ELECTRIC', 'Electric'),
 )
+
 User = get_user_model()
 
 class Offer(models.Model):
@@ -32,7 +33,7 @@ class Offer(models.Model):
     production_year = models.PositiveIntegerField(blank=True, null=True)
     
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    condition = models.CharField(max_length=20, choices=CONDITION_CHOICES, default='UZYWANY')
+    condition = models.CharField(max_length=20, choices=CONDITION_CHOICES, default='USED')
     body_type = models.CharField(max_length=20, choices=BODY_TYPE_CHOICES, blank=True, null=True)
     fuel_type = models.CharField(max_length=20, choices=FUEL_TYPE_CHOICES, blank=True, null=True)
     start_time = models.DateTimeField(default=timezone.now)
@@ -49,7 +50,7 @@ class Offer(models.Model):
     )
 
     def __str__(self):
-        return f"{self.brand} {self.model} ({self.price} PLN)"
+        return f"{self.brand} {self.model} ({self.price} USD)"
 
 class Auction(models.Model):
     offer = models.OneToOneField(Offer, on_delete=models.CASCADE, related_name='auction')
